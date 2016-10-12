@@ -2,7 +2,7 @@ CSS: markdown_styles.css
 
 # DevOps16 - Install Phusion Passenger + nginx on Ubuntu 16.04
 
-[Source](https://www.phusionpassenger.com/library/install/nginx/install/oss/xenial/)
+[Source: phusionpassenger.com](https://www.phusionpassenger.com/library/install/nginx/install/oss/xenial/)
 :
 : [1 - Ubuntu 16.04 user setup](devops16_1_ubuntu16_setup.html)
 : [2 - Install Nginx](devops16_2_install_nginx.html)

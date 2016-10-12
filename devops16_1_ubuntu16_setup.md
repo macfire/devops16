@@ -2,7 +2,7 @@ CSS: markdown_styles.css
 
 # DevOps16 - Ubuntu 16.04 setup
 
-[Source](https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-16-04)
+[Source: digitalocean.com](https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-16-04)
 :
 : [1 - Ubuntu 16.04 user setup](devops16_1_ubuntu16_setup.html)
 : [2 - Install Nginx](devops16_2_install_nginx.html)
