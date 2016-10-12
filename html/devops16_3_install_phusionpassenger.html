@@ -71,16 +71,17 @@ http {
 
 <h2 id="3-checkinstallation">3 - Check installation</h2>
 
-<p>After installation, please validate the install by running <code>sudo /usr/bin/passenger-config validate-install</code>. For example:</p>
+<p>After installation, validate the install by running <code>sudo /usr/bin/passenger-config validate-install</code>.
+All checks should pass. If any of the checks do not pass, please follow the suggestions on screen.</p>
 
 <pre><code>$ sudo /usr/bin/passenger-config validate-install
  * Checking whether this Phusion Passenger install is in PATH... ✓
  * Checking whether there are no other Phusion Passenger installations... ✓
 </code></pre>
 
-<p>All checks should pass. If any of the checks do not pass, please follow the suggestions on screen.</p>
-
-<p>Finally, check whether Nginx has started the Passenger core processes. Run <code>sudo /usr/sbin/passenger-memory-stats</code>. You should see Nginx processes as well as Passenger processes. For example:</p>
+<p>Check whether Nginx has started the Passenger core processes.
+Run <code>sudo /usr/sbin/passenger-memory-stats</code>.
+You should see Nginx processes as well as Passenger processes.</p>
 
 <pre><code>$ sudo /usr/sbin/passenger-memory-stats
 Version: 5.0.8
@@ -108,7 +109,8 @@ PID    VMSize    Private   Name
 
 <h2 id="4-updateregularly">4 - Update regularly</h2>
 
-<p>Nginx updates, Passenger updates and system updates are delivered through the APT package manager regularly. You should run the following command regularly to keep them up to date:</p>
+<p>Nginx updates, Passenger updates and system updates are delivered through the APT package manager regularly.
+You should run the following command regularly to keep them up to date:</p>
 
 <pre><code>$ sudo apt-get update
 $ sudo apt-get upgrade

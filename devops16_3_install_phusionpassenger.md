@@ -66,7 +66,8 @@ $ sudo service nginx restart
 
 ## 3 - Check installation
 
-After installation, please validate the install by running `sudo /usr/bin/passenger-config validate-install`. For example:
+After installation, validate the install by running `sudo /usr/bin/passenger-config validate-install`.
+All checks should pass. If any of the checks do not pass, please follow the suggestions on screen.
 
 ```
 $ sudo /usr/bin/passenger-config validate-install
@@ -74,9 +75,10 @@ $ sudo /usr/bin/passenger-config validate-install
  * Checking whether there are no other Phusion Passenger installations... ✓
 ```
 
-All checks should pass. If any of the checks do not pass, please follow the suggestions on screen.
 
-Finally, check whether Nginx has started the Passenger core processes. Run `sudo /usr/sbin/passenger-memory-stats`. You should see Nginx processes as well as Passenger processes. For example:
+Check whether Nginx has started the Passenger core processes.
+Run `sudo /usr/sbin/passenger-memory-stats`.
+You should see Nginx processes as well as Passenger processes.
 
 ```
 $ sudo /usr/sbin/passenger-memory-stats
@@ -106,7 +108,8 @@ If you do not see any Nginx processes or Passenger processes, then you probably 
 
 ## 4 - Update regularly
 
-Nginx updates, Passenger updates and system updates are delivered through the APT package manager regularly. You should run the following command regularly to keep them up to date:
+Nginx updates, Passenger updates and system updates are delivered through the APT package manager regularly.
+You should run the following command regularly to keep them up to date:
 
 ```
 $ sudo apt-get update
