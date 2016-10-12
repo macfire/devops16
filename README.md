@@ -9,9 +9,9 @@ These instuctions and commands are placed here on GitHub so I can conveniently f
 
 Use instructions and commands at your own risk.
 
+---
 
-TOC
-: [1 - Ubuntu 16.04 user setup](html/devops16_1_ubuntu16_setup.html)
-: [2 - Install Nginx](html/devops16_2_install_nginx.html)
-: [3 - Install Phusion Passenger](html/devops16_3_install_phusionpassenger.html)
+* [1 - Ubuntu 16.04 user setup](html/devops16_1_ubuntu16_setup.html)
+* [2 - Install Nginx](html/devops16_2_install_nginx.html)
+* [3 - Install Phusion Passenger](html/devops16_3_install_phusionpassenger.html)
 
