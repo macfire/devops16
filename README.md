@@ -3,7 +3,7 @@
 
 These step-by-step instructions are taken from various tutorials on [digitalocean.com](https://digitalocean.com), [phusionpassenger.com](https://www.phusionpassenger.com), and other sites. Some sources have been linked.  Most step descriptions have been shortened and simplified. Some step sequences are from one source while other may come from various sources.
 
-These instuctions and commands are placed on GitHub so I can conveniently find them. I am a novice with Ubuntu, Nginx, Passenger, command line, etc., so I probably can't answer any questions. However, I'll be glad to incorporate any changes that are needed.
+These instructions and commands are placed on GitHub so I can conveniently find them. I am a novice with Ubuntu, Nginx, Passenger, command line, etc., so I probably can't answer any questions. However, I'll be glad to incorporate any corrections that are needed.
 
 Use instructions and commands at your own risk.
 
