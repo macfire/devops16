@@ -44,14 +44,17 @@ sudo apt-get install -y nginx-extras passenger
 
 <h2 id="step2:enablethepassengernginxmoduleandrestartnginx">Step 2: enable the Passenger Nginx module and restart Nginx</h2>
 
-<p>Edit <code>/etc/nginx/nginx.conf</code> and uncomment include <code>/etc/nginx/passenger.conf;</code>. For example, you may see this:</p>
+<p>Open <code>/etc/nginx/nginx.conf</code></p>
 
-<pre><code># include /etc/nginx/passenger.conf;
+<pre><code>sudo nano /etc/nginx/nginx.conf
 </code></pre>
 
-<p>Remove the &#8216;#&#8217; characters, like this:</p>
+<p>Uncomment include <code>/etc/nginx/passenger.conf;</code>.</p>
 
-<pre><code>include /etc/nginx/passenger.conf;
+<pre><code># include /etc/nginx/passenger.conf;
+
+# Remove the '#' characters, like this:
+include /etc/nginx/passenger.conf;
 </code></pre>
 
 <p>If you don&#8217;t see a commented version of include <code>/etc/nginx/passenger.conf;</code> inside nginx.conf, then you need to insert it yourself. Insert it into <code>/etc/nginx/nginx.conf</code> inside the <code>http</code> block. For example:</p>
