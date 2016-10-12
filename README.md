@@ -1,5 +1,5 @@
 # devops16
-sh commands to setup Ubuntu 16.04 + Nginx + Passenger
+### sh commands to setup Ubuntu 16.04 + Nginx + Passenger
 
 These step-by-step instructions are taken from various tutorials on [digitalocean.com](https://digitalocean.com), [phusionpassenger.com](https://www.phusionpassenger.com), and other sites. Some sources have been linked. 
 
