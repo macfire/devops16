@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<link type="text/css" rel="stylesheet" href="markdown_styles.css"/>
+</head>
+<body>
+
+<h1 id="devops16-installnginxonubuntu16.04">DevOps16 - Install Nginx on Ubuntu 16.04</h1>
+
+<dl>
+<dt><a href="https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-16-04">Source</a></dt>
+<dd></dd>
+
+<dd><a href="devops16_1_ubuntu16_setup.html">1 - Ubuntu 16.04 user setup</a></dd>
+
+<dd><a href="devops16_2_install_nginx.html">2 - Install Nginx</a></dd>
+
+<dd><a href="devops16_3_install_phusionpassenger.html">3 - Install Phusion Passenger</a></dd>
+</dl>
+
+<h4 id="usesudouserviasshloginforfollowingcommandsinsteadofroot">Use sudo user via ssh login for following commands (instead of <code>root</code>)</h4>
+
+<h2 id="1-installnginx">1 - Install Nginx</h2>
+
+<p>Update local apt package index.</p>
+
+<pre><code>sudo apt-get update
+</code></pre>
+
+<p>Install <code>nginx</code></p>
+
+<pre><code>sudo apt-get install nginx
+</code></pre>
+
+<h2 id="2-adjustthefirewall">2 - Adjust the Firewall</h2>
+
+<p>Nginx registers itself as a service with <code>ufw</code>, our firewall, upon installation.
+List application configurations that <code>ufw</code> knows how to work with.</p>
+
+<pre><code>sudo ufw app list
+</code></pre>
+
+<p>Three (3) profiles should be available for nginx.</p>
+
+<pre><code>Output
+Available applications:
+  Nginx Full
+  Nginx HTTP
+  Nginx HTTPS
+  OpenSSH
+</code></pre>
+
+<p>It is recommended to enable the most restrictive profile that will still allow the traffic you&#8217;ve configured.
+Since SSL is not yet configured, only need to allow traffic on port 80 at this time.
+You can enable this by typing:</p>
+
+<pre><code>sudo ufw allow 'Nginx HTTP'
+</code></pre>
+
+<p>Verify the change</p>
+
+<pre><code>sudo ufw status
+</code></pre>
+
+<p>You should see HTTP traffic allowed in the displayed output:</p>
+
+<pre><code>Output
+Status: active
+
+To                         Action      From
+--                         ------      ----
+OpenSSH                    ALLOW       Anywhere                  
+Nginx HTTP                 ALLOW       Anywhere                  
+OpenSSH (v6)               ALLOW       Anywhere (v6)             
+Nginx HTTP (v6)            ALLOW       Anywhere (v6)
+</code></pre>
+
+<h2 id="3-checkwebserver">3 - Check Web Server</h2>
+
+<h5 id="attheendoftheinstallationprocessubuntu16.04startsnginx.thewebservershouldalreadybeupandrunning.">At the end of the installation process, Ubuntu 16.04 starts Nginx. The web server should already be up and running.</h5>
+
+<p>Check with the systemd init system to make sure the service is running:</p>
+
+<pre><code>systemctl status nginx
+</code></pre>
+
+<pre><code>Output
+● nginx.service - A high performance web server and a reverse proxy server
+   Loaded: loaded (/lib/systemd/system/nginx.service; enabled; vendor preset: enabled)
+   Active: active (running) since Mon 2016-04-18 16:14:00 EDT; 4min 2s ago
+ Main PID: 12857 (nginx)
+   CGroup: /system.slice/nginx.service
+           ├─12857 nginx: master process /usr/sbin/nginx -g daemon on; master_process on
+           └─12858 nginx: worker process
+</code></pre>
+
+<h5 id="verifybyaccessingthedefaultnginxlandingpagethroughyourserversdomainnameoripaddress.ifadomainnameisnotsetupforserverlearnhowtosetupadomainwithdigitaloceanhere.ifyoudonotwanttosetupadomainnameforyourserveruseserverspublicipaddress.">Verify by accessing the default Nginx landing page through your server&#8217;s domain name or IP address. If a domain name is not set up for server, learn how to <a href="https://digitalocean.com/community/articles/how-to-set-up-a-host-name-with-digitalocean">set up a domain with DigitalOcean here.</a> If you do not want to set up a domain name for your server, use server&#8217;s public IP address.</h5>
+
+<p>To find IP address from the command line:
+You will get back a few lines. You can try each in your web browser to see if they work.</p>
+
+<pre><code>ip addr show eth0 | grep inet | awk '{ print $2; }' | sed 's/\/.*$//'
+</code></pre>
+
+<p>An alternative, should give you your public IP address as seen from another website:</p>
+
+<pre><code>sudo apt-get install curl
+curl -4 icanhazip.com
+</code></pre>
+
+<p>When you have your server&#8217;s IP address or domain, enter it into your browser&#8217;s address bar:</p>
+
+<pre><code>http://server_domain_or_IP
+</code></pre>
+
+<h5 id="youshouldseethedefaultnginxlandingpagewhichshouldlooksomethinglikethis:">You should see the default Nginx landing page, which should look something like this:</h5>
+
+<p><img src='https://assets.digitalocean.com/articles/nginx_1604/default_page.png' /></p>
+
+<h2 id="step4:managethenginxprocess">Step 4: Manage the Nginx Process</h2>
+
+<h5 id="nowthatyouhaveyourwebserverupandrunningwecangooversomebasicmanagementcommands.">Now that you have your web server up and running, we can go over some basic management commands.</h5>
+
+<p>To stop web server:</p>
+
+<pre><code>sudo systemctl stop nginx
+</code></pre>
+
+<p>To start web server when it is stopped:</p>
+
+<pre><code>sudo systemctl start nginx
+</code></pre>
+
+<p>To stop and then start the service again:</p>
+
+<pre><code>sudo systemctl restart nginx
+</code></pre>
+
+<p>If simply making config changes, Nginx can often reload without dropping connections. Use:</p>
+
+<pre><code>sudo systemctl reload nginx
+</code></pre>
+
+<p>To disable Nginx auto-start up at boot:</p>
+
+<pre><code>sudo systemctl disable nginx
+</code></pre>
+
+<p>To re-enable the service to start up at boot:</p>
+
+<pre><code>sudo systemctl enable nginx
+</code></pre>
+
+<h2 id="step5:getfamiliarwithimportantnginxfilesanddirectories">Step 5: Get Familiar with Important Nginx Files and Directories</h2>
+
+<h5 id="nowthatyouknowhowtomanagetheserviceitselfyoushouldtakeafewminutestofamiliarizeyourselfwithafewimportantdirectoriesandfiles.">Now that you know how to manage the service itself, you should take a few minutes to familiarize yourself with a few important directories and files.</h5>
+
+<h3 id="content">Content</h3>
+
+<ul>
+<li><code>/var/www/html</code>: The actual web content, which by default only consists of the default Nginx page you saw earlier, is served out of the <code>/var/www/html</code> directory. This can be changed by altering Nginx configuration files.</li>
+</ul>
+
+<h3 id="serverconfiguration">Server Configuration</h3>
+
+<ul>
+<li><code>/etc/nginx</code>: The nginx configuration directory. All of the Nginx configuration files reside here.</li>
+<li><code>/etc/nginx/nginx.conf</code>: The main Nginx configuration file. This can be modified to make changes to the Nginx global configuration.</li>
+<li><code>/etc/nginx/sites-available</code>: The directory where per-site &#8220;server blocks&#8221; can be stored. Nginx will not use the configuration files found in this directory unless they are linked to the <code>sites-enabled</code> directory (see below). Typically, all server block configuration is done in this directory, and then enabled by linking to the other directory.</li>
+<li><code>/etc/nginx/sites-enabled/</code>: The directory where enabled per-site &#8220;server blocks&#8221; are stored. Typically, these are created by linking to configuration files found in the <code>sites-available</code> directory.</li>
+<li><code>/etc/nginx/snippets</code>: This directory contains configuration fragments that can be included elsewhere in the Nginx configuration. Potentially repeatable configuration segments are good candidates for refactoring into snippets.</li>
+</ul>
+
+<h3 id="serverlogs">Server Logs</h3>
+
+<ul>
+<li><code>/var/log/nginx/access.log</code>: Every request to your web server is recorded in this log file unless Nginx is configured to do otherwise.</li>
+<li><code>/var/log/nginx/error.log</code>: Any Nginx errors will be recorded in this log.</li>
+</ul>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<h5 id="nowthatyouhaveyourwebserverinstalledyouhavemanyoptionsforthetypeofcontenttoserveandthetechnologiesyouwanttousetocreatearicherexperience.">Now that you have your web server installed, you have many options for the type of content to serve and the technologies you want to use to create a richer experience.</h5>
+
+<h5 id="learnhowtousenginxserverblockshere.ifyoudliketobuildoutamorecompleteapplicationstackcheckoutthisarticleonhowtoconfigurealempstackonubuntu14.04.">Learn <a href="https://www.digitalocean.com/community/articles/how-to-set-up-nginx-server-blocks-virtual-hosts-on-ubuntu-14-04-lts">how to use Nginx server blocks</a> here. If you&#8217;d like to build out a more complete application stack, check out this article on <a href="https://www.digitalocean.com/community/articles/how-to-install-linux-nginx-mysql-php-lemp-stack-on-ubuntu-14-04">how to configure a LEMP stack on Ubuntu 14.04</a>.</h5>
+
+</body>
+</html>

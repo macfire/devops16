@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<link type="text/css" rel="stylesheet" href="markdown_styles.css"/>
+</head>
+<body>
+
+<h1 id="devops16-ubuntu16.04setup">DevOps16 - Ubuntu 16.04 setup</h1>
+
+<dl>
+<dt><a href="https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-16-04">Source</a></dt>
+<dd></dd>
+
+<dd><a href="devops16_1_ubuntu16_setup.html">1 - Ubuntu 16.04 user setup</a></dd>
+
+<dd><a href="devops16_2_install_nginx.html">2 - Install Nginx</a></dd>
+
+<dd><a href="devops16_3_install_phusionpassenger.html">3 - Install Phusion Passenger</a></dd>
+</dl>
+
+<h2 id="1-rootlogin">1 - Root Login</h2>
+
+<p>Via terminal. Change password as may be prompted.</p>
+
+<pre><code>ssh root@SERVER_IP_ADDRESS
+</code></pre>
+
+<h2 id="2-createnewuser">2- Create New User</h2>
+
+<p>Create new user to carry out day-to-day tasks, to avoid using <code>root</code></p>
+
+<pre><code>adduser USER_NAME
+</code></pre>
+
+<p>Create <code>.ssh</code> folder and <code>authorized_keys</code> file</p>
+
+<pre><code>mkdir ~/.ssh
+chmod 700 ~/.ssh
+touch ~/.ssh/authorized_keys
+</code></pre>
+
+<h2 id="3-rootprivileges">3 - Root Privileges</h2>
+
+<p>Add new user to <code>sudo</code> group. By using <code>sudo</code>, user will have root privileges.<br />
+<a href="](https://www.digitalocean.com/community/tutorials/how-to-edit-the-sudoers-file-on-ubuntu-and-centos)">sudoers tutorial</a></p>
+
+<pre><code>usermod -aG sudo USER_NAME
+</code></pre>
+
+<h2 id="4-addpublickeyauthentication">4 - Add Public Key Authentication</h2>
+
+<h3 id="generateakeypairifnotalreadyexists">Generate a Key Pair (if not already exists)</h3>
+
+<p>Generate key on LOCAL machine</p>
+
+<pre><code>(local$) ssh-keygen
+</code></pre>
+
+<h3 id="copythepublickey">Copy the Public Key</h3>
+
+<h4 id="option1:usessh-copy-id">Option 1: Use ssh-copy-id</h4>
+
+<p>If <code>ssh-copy-id</code> is installed locally, then use this to add key to remote user&#8217;s <code>.ssh/authorized_keys</code> file. (Note: will need a password)</p>
+
+<pre><code class="sh_local">(local$) ssh-copy-id USER_NAME@REMOTE_SERVER_IP
+</code></pre>
+
+<h4 id="option2:manuallyinstallthekey">Option 2: Manually Install the Key</h4>
+
+<p>Print SSH public key to terminal. Select and copy.</p>
+
+<pre><code>(local$) cat ~/.ssh/id_rsa.pub
+</code></pre>
+
+<p>On server, as <code>root</code> user, temporatily switch to new user</p>
+
+<pre><code>su - USER_NAME
+</code></pre>
+
+<p>Open file in <code>.ssh/authorized_keys</code> to edit.
+Paste key. <code>CTRL-X</code> to exit file, <code>y</code> to save changes, then <code>ENTER</code></p>
+
+<pre><code>nano ~/.ssh/authorized_keys
+</code></pre>
+
+<p>Restrict permissions of the <code>authorized_keys</code></p>
+
+<pre><code>chmod 600 ~/.ssh/authorized_keys
+</code></pre>
+
+<p>return to <code>root</code> user</p>
+
+<pre><code>exit
+</code></pre>
+
+<h2 id="7-setupbasicfirewall">7 - Set up basic firewall</h2>
+
+<p>Ubuntu 16.04 servers can use the UFW firewall to make sure only connections to certain services are allowed. We can set up a basic firewall very easily using this application.</p>
+
+<p>Different applications can register their profiles with UFW upon installation. These profiles allow UFW to manage these applications by name. OpenSSH, the service allowing us to connect to our server now, has a profile registered with UFW.</p>
+
+<p>You can see this by typing:</p>
+
+<pre><code>sudo ufw app list
+Output
+Available applications:
+  OpenSSH
+</code></pre>
+
+<p>We need to make sure that the firewall allows SSH connections so that we can log back in next time. We can allow these connections by typing:</p>
+
+<pre><code>sudo ufw allow OpenSSH
+</code></pre>
+
+<p>Afterwards, we can enable the firewall by typing:</p>
+
+<pre><code>sudo ufw enable
+</code></pre>
+
+<p>Type &#8220;y&#8221; and press ENTER to proceed. You can see that SSH connections are still allowed by typing:</p>
+
+<pre><code>sudo ufw status
+Output
+Status: active
+
+To                         Action      From
+--                         ------      ----
+OpenSSH                    ALLOW       Anywhere
+OpenSSH (v6)               ALLOW       Anywhere (v6)
+</code></pre>
+
+<hr />
+
+</body>
+</html>
