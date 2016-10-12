@@ -5,7 +5,7 @@ These step-by-step instructions are taken from various tutorials on [digitalocea
 
 These instructions and commands are placed on GitHub so I can conveniently find them. I am a novice with Ubuntu, Nginx, Passenger, command line, etc., so I probably can't answer any questions. However, I'll be glad to incorporate any corrections that are needed.
 
-Use instructions and commands at your own risk.
+_Use instructions and commands at your own risk._
 
 ---
 
