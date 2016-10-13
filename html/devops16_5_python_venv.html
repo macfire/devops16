@@ -29,20 +29,7 @@
 
 <h5 id="ubuntuslatestlongtermsupportltsoperatingsystemwasreleasedlastmonthinapril2016.the16.04updateforubuntuisknownasxenialxerusanditsthefirstubuntureleasetoincludepython3asthedefaultpythoninstallation.wecanusethisnewubuntureleasealongwithpythonversion3.5tostartanewflaskwebapplicationproject."><a href="/ubuntu.html">Ubuntu</a>&#8217;s latest Long Term Support (LTS) <a href="/operating-systems.html">operating system</a> was released last month, in April 2016. The 16.04 update for Ubuntu is known as &#8220;Xenial Xerus&#8221; and it&#8217;s the first Ubuntu release to include <a href="/python-2-or-3.html">Python 3</a> as the default Python installation. We can use this new Ubuntu release along with Python version 3.5 to start a new <a href="/flask.html">Flask</a> web application project.</h5>
 
-<h2 id="toolswellneed">Tools We&#8217;ll Need</h2>
-
-<h5 id="wellneedtheubuntu16.04releasealongwithafewotherlibrariestocompleteourproject.youdonthavetoinstallthesetoolsjustyetwewillgettothemasweprogressthroughthewalkthrough.ourrequirementsandtheircurrentversionsasofmay102016are:">We&#8217;ll need the Ubuntu 16.04 release along with a few other libraries to complete our project. You don&#8217;t have to install these tools just yet, we will get to them as we progress through the walkthrough. Our requirements and their current versions as of May 10, 2016 are:</h5>
-
-<ul>
-<li><a href="http://releases.ubuntu.com/16.04/">Ubuntu 16.04 LTS (Xenial Xerus)</a></li>
-<li><a href="/why-use-python.html">Python</a> version <a href="https://docs.python.org/3/whatsnew/3.5.html">3.5</a> (default in Ubuntu 16.04)</li>
-<li><a href="/flask.html">Flask</a> web framework version <a href="http://flask.pocoo.org/docs/0.10/">0.10</a></li>
-<li><a href="/green-unicorn-gunicorn.html">Green Unicorn (Gunicorn)</a> version <a href="http://docs.gunicorn.org/en/stable/news.html">19.4</a></li>
-</ul>
-
-<h5 id="ifyourerunningonmacosxorwindowsusevirtualizationsoftwaresuchasparallelsorvirtualboxwiththeubuntu.isofile.eithertheamd64ori386versionof16.04isfine.imusingamd64fordevelopmentandtestinginthistutorial.">If you&#8217;re running on Mac OS X or Windows, use virtualization software such as <a href="https://www.parallels.com/products/desktop/">Parallels</a> or <a href="https://www.virtualbox.org/wiki/Downloads">VirtualBox</a> with the <a href="http://releases.ubuntu.com/16.04/">Ubuntu .iso file</a>. Either the amd64 or i386 version of 16.04 is fine. I&#8217;m using amd64 for development and testing in this tutorial.</h5>
-
-<h2 id="systempackages">System Packages</h2>
+<h2 id="installsystempackages">Install System Packages</h2>
 
 <p>We can see the python3 system version Ubuntu comes with and where its
 executable is stored using these commands.</p>
@@ -57,7 +44,7 @@ Enter <code>y</code> to let the system package installation process do its job.<
 <pre><code>sudo apt-get install virtualenv python-pip python3-dev
 </code></pre>
 
-<h2 id="virtualenv">Virtualenv</h2>
+<h2 id="createvirtualenvironment">Create virtual environment</h2>
 
 <h5 id="intheprevioussectionvirtualenvandpipwereinstalledtohandleourapplicationdependencies.">In the previous section, <a href="https://virtualenv.pypa.io/en/latest/">virtualenv</a> and <a href="https://pypi.python.org/pypi/pip">pip</a> were installed to handle our <a href="/application-dependencies.html">application dependencies</a>.</h5>
 
