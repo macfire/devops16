@@ -2,7 +2,7 @@ CSS: markdown_styles.css
 date: 2016-05-10
 modified: 2016-08-10
 
-# DevOps16 - Python Virtual Environment
+# DevOps16 - Create Python Virtual Environment
 
 ##### [Source: Matt Makai @ fullstackpython.com](https://www.fullstackpython.com/blog/python-3-django-gunicorn-ubuntu-1604-xenial-xerus.html)
 
