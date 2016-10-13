@@ -57,13 +57,15 @@ Enter <code>y</code> to let the system package installation process do its job.<
 <pre><code>sudo apt-get install virtualenv python-pip python3-dev
 </code></pre>
 
-<h2 id="deploywithgit">Deploy with Git</h2>
-
-<h5 id="adirectoryfortheappwillneedtobecreated.ifyouwanttocreatethepythonvirtualenvironmentintheapprootdirectorypleasefollowthetutorialdeployflaskappwithgitbeforeproceedingwiththenextsection.">A directory for the APP will need to be created. If you want to create the Python virtual environment in the APP root directory, please follow the tutorial <a href="devops16_6_deploy_flask_app_w_git.html">Deploy Flask App with Git</a> before proceeding with the next section.</h5>
-
 <h2 id="virtualenv">Virtualenv</h2>
 
 <h5 id="intheprevioussectionvirtualenvandpipwereinstalledtohandleourapplicationdependencies.">In the previous section, <a href="https://virtualenv.pypa.io/en/latest/">virtualenv</a> and <a href="https://pypi.python.org/pypi/pip">pip</a> were installed to handle our <a href="/application-dependencies.html">application dependencies</a>.</h5>
+
+<h3 id="wheretostorevirtualenvironments">Where to store virtual environments?</h3>
+
+<h3 id="option1:placeinappsrootfolder">Option 1: Place in APP&#8217;s root folder</h3>
+
+<h5 id="ifyouwanttocreatethepythonvirtualenvironmentintheapprootdirectorypleasefollowthetutorialdeployflaskappwithgittosetupappdirectory.">If you want to create the Python virtual environment in the APP root directory, please follow the tutorial <a href="devops16_6_deploy_flask_app_w_git.html">Deploy Flask App with Git</a> to set up APP directory.</h5>
 
 <p>Create a new virtualenv. This example uses the apps root folder.</p>
 
@@ -76,6 +78,35 @@ virtualenv --python=/usr/bin/python3 venv
 <p>Activate the virtualenv.</p>
 
 <pre><code>source /var/www/APP_NAME/venv/bin/activate
+</code></pre>
+
+<p>Our prompt will change after we properly activate the virtualenv.
+Our virtualenv is now activated with Python 3. We can install
+dependencies. For example, from a requirements.txt file located in APP&#8217;s code file:</p>
+
+<pre><code>cd /var/www/APP_NAME/code
+sudo pip install -r requirements.txt
+
+</code></pre>
+
+<h3 id="option2:placeincommonvenvsfolder">Option 2: Place in common venvs folder</h3>
+
+<p>Create a common folder to store virtual environments.
+For example, in user&#8217;s home directory.</p>
+
+<pre><code>cd ~
+mkdir venvs
+</code></pre>
+
+<p>Create a new virtualenv, specifying version.</p>
+
+<pre><code># specify the system python3 installation
+virtualenv --python=/usr/bin/python3 venvs/APP_NAME
+</code></pre>
+
+<p>Activate the virtualenv.</p>
+
+<pre><code>source /venvs/APP_NAME/bin/activate
 </code></pre>
 
 <p>Our prompt will change after we properly activate the virtualenv.

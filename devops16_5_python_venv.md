@@ -49,13 +49,16 @@ Enter `y` to let the system package installation process do its job.
 sudo apt-get install virtualenv python-pip python3-dev
 ```
 
-## Deploy with Git
-
-##### A directory for the APP will need to be created. If you want to create the Python virtual environment in the APP root directory, please follow the tutorial [Deploy Flask App with Git](devops16_6_deploy_flask_app_w_git.html) before proceeding with the next section.
 
 ## Virtualenv
 
 ##### In the previous section, [virtualenv](https://virtualenv.pypa.io/en/latest/) and [pip](https://pypi.python.org/pypi/pip) were installed to handle our [application dependencies](/application-dependencies.html).
+
+### Where to store virtual environments?
+
+### Option 1: Place in APP's root folder
+
+##### If you want to create the Python virtual environment in the APP root directory, please follow the tutorial [Deploy Flask App with Git](devops16_6_deploy_flask_app_w_git.html) to set up APP directory.
 
 Create a new virtualenv. This example uses the apps root folder.
 
@@ -70,6 +73,39 @@ Activate the virtualenv.
 
 ```
 source /var/www/APP_NAME/venv/bin/activate
+```
+
+Our prompt will change after we properly activate the virtualenv.
+Our virtualenv is now activated with Python 3. We can install
+dependencies. For example, from a requirements.txt file located in APP's code file:
+
+```
+cd /var/www/APP_NAME/code
+sudo pip install -r requirements.txt
+
+```
+
+### Option 2: Place in common venvs folder
+
+Create a common folder to store virtual environments.
+For example, in user's home directory.
+
+```
+cd ~
+mkdir venvs
+```
+
+Create a new virtualenv, specifying version.
+
+```
+# specify the system python3 installation
+virtualenv --python=/usr/bin/python3 venvs/APP_NAME
+```
+
+Activate the virtualenv.
+
+```
+source /venvs/APP_NAME/bin/activate
 ```
 
 Our prompt will change after we properly activate the virtualenv.
