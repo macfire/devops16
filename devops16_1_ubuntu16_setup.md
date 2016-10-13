@@ -10,6 +10,8 @@ CSS: markdown_styles.css
 : [2 - Install Nginx](devops16_2_install_nginx.html)
 : [3 - Install Phusion Passenger](devops16_3_install_phusionpassenger.html)
 : [4 - Install MongoDB](devops16_4_install_mongodb.html)
+: [5 - Python venv](devops16_5_python_venv.html)
+: [6 - Deploy via Git](devops16_5_deploy_flask_app_w_git.html)
 
 
 ## 1 - Root Login
