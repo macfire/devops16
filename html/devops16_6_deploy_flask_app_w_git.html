@@ -25,12 +25,190 @@
 <dd><a href="devops16_6_deploy_flask_app_w_git.html">6 - Deploy via Git</a></dd>
 </dl>
 
-<h2 id="1-rootlogin">1 - Root Login</h2>
+<h4 id="replaceappandapp_userwithyourappsnameandyourappuseraccountsname.">Replace <code>APP</code> and <code>APP_USER</code> with your app&#8217;s name and your app user account&#8217;s name.</h4>
 
-<p>Via terminal. Change password as may be prompted.</p>
+<h2 id="pushappcodetogitrepository">Push app code to Git repository</h2>
 
-<pre><code>ssh root@SERVER_IP_ADDRESS
+<p>Transfer application&#8217;s code to an existing Git repository. If you have not already setup a Git repository, go to Github, create a repository and push your application&#8217;s code there.</p>
+
+<pre><code>git push
 </code></pre>
+
+<h2 id="loginorcreatesuperuser">Login or create superuser</h2>
+
+<h5 id="sitesshouldbedeployedusingsuperuserloginwithrootprivilegesinsteadofusingrootuser.ifnotsetupseesettingupadminuserhere.">Sites should be deployed using superuser login with root privileges, instead of using root user. If not setup, see <a href="devops16_1_ubuntu16_setup.html">setting up admin user</a> here.</h5>
+
+<h2 id="createuserfortheapp">Create user for the app</h2>
+
+<p>Check to see if public key exists</p>
+
+<pre><code>cat ~/.ssh/id_rsa.pub
+</code></pre>
+
+<p>If not, create public key</p>
+
+<pre><code>ssh-keygen -t rsa
+</code></pre>
+
+<p>Create .ssh directory and the authorized_keys file.
+Permissions are important!</p>
+
+<pre><code>mkdir ~/.ssh
+chmod 700 ~/.ssh
+touch ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+</code></pre>
+
+<p>Add public key to the authorized_keys file</p>
+
+<pre><code>cat ~/.ssh/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys
+</code></pre>
+
+<p>Create an operating system user account for your app.</p>
+
+<pre><code>sudo adduser APP_USER
+</code></pre>
+
+<h5 id="runeachappunderitsownuseraccountinordertolimitdamagethatsecurityvulnerabilitiesintheappcando.passengerwillautomaticallyrunyourappunderthisuseraccountaspartofitsuseraccountsandboxingfeature.recommendedtogivetheuseraccountthesamenameasapp.">Run each app under its own user account in order to limit damage that security vulnerabilities in the app can do. <em>Passenger will automatically run your app under this user account as part of its user account sandboxing feature.</em> Recommended to give the user account the same name as app.</h5>
+
+<p>Ensure that <code>APP_USER</code> has SSH key installed:</p>
+
+<pre><code>APP_USER=your_user_name
+
+sudo mkdir -p &quot;~$APP_USER/.ssh&quot;
+touch $HOME/.ssh/authorized_keys
+sudo sh -c &quot;cat $HOME/.ssh/authorized_keys &gt;&gt; ~$APP_USER/.ssh/authorized_keys&quot;
+sudo chown -R $APP_USER: &quot;~$APP_USER/.ssh&quot;
+sudo chmod 700 &quot;~$APP_USER/.ssh&quot;
+sudo sh -c &quot;chmod 600 ~$APP_USER/.ssh/*&quot;
+</code></pre>
+
+<h2 id="installgitontheserver">Install Git on the server</h2>
+
+<h4 id="storeappcodeontheserveratvarwwwapp_namecode">Store app code on the server at <code>/var/www/APP_NAME/code</code></h4>
+
+<p>Install git</p>
+
+<pre><code>sudo apt-get install -y git
+</code></pre>
+
+<p>Create directory to store application code. Recommend <code>/var/www/APP_NAME</code>.</p>
+
+<pre><code>APP_USER=your_user_name
+APP_NAME=your_app_name
+
+sudo mkdir -p /var/www/$APP_NAME
+sudo chown $APP_USER: /var/www/$APP_NAME
+</code></pre>
+
+<p>Add key github account. Use <code>cat</code> and copy output from terminal. Paste in GitHub ssh keys settings.</p>
+
+<pre><code>cat ~/.ssh/id_rsa.pub
+</code></pre>
+
+<p>Add github.com to known hosts</p>
+
+<pre><code>ssh -T git@github.com
+</code></pre>
+
+<p>Pull the code from Git:</p>
+
+<pre><code>cd /var/www/APP_NAME
+sudo -u APP_USER -H git clone git://github.com/APP_USER/APP_NAME.git code
+</code></pre>
+
+<p>To target git branch:</p>
+
+<pre><code>cd /var/www/APP_NAME
+sudo -u APP_USER -H git clone --branch=end_result git://github.com/url-here.git code
+</code></pre>
+
+<p>Update git</p>
+
+<pre><code>sudo -u APP_USER -H git pull origin master
+</code></pre>
+
+<hr />
+
+<h1 id="preparingtheappsenvironment">Preparing the app&#8217;s environment</h1>
+
+<h2 id="createvirtualenvironment">Create Virtual Environment</h2>
+
+<p>Navigate to desired folder to store venv</p>
+
+<pre><code>cd /var/www/APP_NAME
+</code></pre>
+
+<p>Create a python virtual environment for app.
+If using python3.5, use:</p>
+
+<pre><code>pyvenv venv
+</code></pre>
+
+<h2 id="installappdependencies">Install app dependencies</h2>
+
+<p>Install Python libraries through pip. For example, if your application depends on Flask:</p>
+
+<pre><code>sudo pip install flask
+</code></pre>
+
+<p>or</p>
+
+<pre><code>sudo pip install -r requirements.txt
+</code></pre>
+
+<h2 id="installotherservices">Install other services</h2>
+
+<h5 id="yourappmayalsodependonservicessuchaspostgresqlredisetc.installingservicesthatyourappdependsonisoutsideofthistutorialsscope.">Your app may also depend on services, such as PostgreSQL, Redis, etc. Installing services that your app depends on is outside of this tutorial&#8217;s scope.</h5>
+
+<hr />
+
+<h1 id="configuringnginxandpassenger">Configuring Nginx and Passenger</h1>
+
+<h5 id="nowthatyouaredonewithtransferringyourappscodetotheserverandsettingupanenvironmentforyourappitistimetoconfigurenginxsothatpassengerknowshowtoserveyourapp.">Now that you are done with transferring your app&#8217;s code to the server and setting up an environment for your app, it is time to configure Nginx so that Passenger knows how to serve your app.</h5>
+
+<h2 id="editnginxconfigurationfile">Edit Nginx configuration file</h2>
+
+<p>Create an Nginx configuration file and setup a virtual host entry that points to your app. This virtual host entry tells Nginx (and Passenger) where your app is located. Replace <code>APP_NAME</code> with your app&#8217;s name.</p>
+
+<pre><code>sudo nano /etc/nginx/sites-enabled/APP_NAME.conf
+</code></pre>
+
+<p>Put this inside the file.
+Replace <code>yourserver.com</code> with your server&#8217;s host name, and replace <code>/var/www/APP_NAME/code</code> with your application&#8217;s code directory path. However, make sure that Nginx is configured to point to the <em>public subdirectory</em> inside it!</p>
+
+<pre><code>server {
+    listen 80;
+    server_name yourserver.com;
+
+    # Tell Nginx and Passenger where your app's 'public' directory is
+    root /var/www/APP_NAME/code/public;
+
+    # Turn on Passenger
+    passenger_enabled on;
+}
+</code></pre>
+
+<p>Restart Nginx</p>
+
+<pre><code>sudo service nginx restart
+</code></pre>
+
+<h2 id="testdrive">Test drive</h2>
+
+<p>Should now be able to access app through the server&#8217;s host name.
+Run following from your local computer. Replace <code>yourserver.com</code> with server&#8217;s hostname, exactly as it appears in the Nginx config file&#8217;s <code>server_name</code> directive.</p>
+
+<pre><code>curl http://yourserver.com/
+...your app's front page HTML...
+</code></pre>
+
+<h5 id="ifyoudonotseeyourappsfrontpagehtmlthenthesearethemostlikelycauses:">If you do not see your app&#8217;s front page HTML, then these are the most likely causes:</h5>
+
+<ol>
+<li>Incorrectly configured <code>server_name</code> directive. The <code>server_name</code> must exactly match the host name in the URL. <em>For example, if you use the command curl http://45.55.91.235/ to access your app, then the server_name must be 45.55.91.235.</em></li>
+<li>DNS records not setup. Setting up DNS is outside the scope of this tutorial. In the mean time, we recommend that you use your server&#8217;s IP address as the server name.</li>
+</ol>
 
 <div class='footnotes'>
 <p>These step-by-step instructions are taken from various tutorials on <a href="https://digitalocean.com">digitalocean.com</a>, <a href="https://www.phusionpassenger.com">phusionpassenger.com</a>, and other sites. Some sources have been linked. Most step descriptions have been shortened and simplified. Some step sequences are from one source while other may come from various sources.</p>

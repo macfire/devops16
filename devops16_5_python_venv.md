@@ -1,8 +1,10 @@
 CSS: markdown_styles.css
+date: 2016-05-10
+modified: 2016-08-10
 
 # DevOps16 - Python Virtual Environment
 
-##### [Source: digitalocean.com](https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-16-04)
+##### [Source: Matt Makai @ fullstackpython.com](https://www.fullstackpython.com/blog/python-3-django-gunicorn-ubuntu-1604-xenial-xerus.html)
 
 
 [Home](../index.html)
@@ -14,12 +16,73 @@ CSS: markdown_styles.css
 : [6 - Deploy via Git](devops16_6_deploy_flask_app_w_git.html)
 
 
-## 1 - Root Login
 
-Via terminal. Change password as may be prompted.
+##### [Ubuntu](/ubuntu.html)'s latest Long Term Support (LTS) [operating system](/operating-systems.html) was released last month, in April 2016. The 16.04 update for Ubuntu is known as "Xenial Xerus" and it's the first Ubuntu release to include [Python 3](/python-2-or-3.html) as the default Python installation. We can use this new Ubuntu release along with Python version 3.5 to start a new [Flask](/flask.html) web application project.
+
+
+## Tools We'll Need
+
+##### We'll need the Ubuntu 16.04 release along with a few other libraries to complete our project. You don't have to install these tools just yet, we will get to them as we progress through the walkthrough. Our requirements and their current versions as of May 10, 2016 are:
+
+* [Ubuntu 16.04 LTS (Xenial Xerus)](http://releases.ubuntu.com/16.04/)
+* [Python](/why-use-python.html) version [3.5](https://docs.python.org/3/whatsnew/3.5.html) (default in Ubuntu 16.04)
+* [Flask](/flask.html) web framework version [0.10](http://flask.pocoo.org/docs/0.10/)
+* [Green Unicorn (Gunicorn)](/green-unicorn-gunicorn.html) version [19.4](http://docs.gunicorn.org/en/stable/news.html)
+
+##### If you're running on Mac OS X or Windows, use virtualization software such as [Parallels](https://www.parallels.com/products/desktop/) or [VirtualBox](https://www.virtualbox.org/wiki/Downloads) with the [Ubuntu .iso file](http://releases.ubuntu.com/16.04/). Either the amd64 or i386 version of 16.04 is fine. I'm using amd64 for development and testing in this tutorial.
+
+
+## System Packages
+
+We can see the python3 system version Ubuntu comes with and where its
+executable is stored using these commands.
 
 ```
-ssh root@SERVER_IP_ADDRESS
+python3 --version
+which python3
+```
+
+Install required system packages, using superuser login with `sudo`.
+Enter `y` to let the system package installation process do its job.
+
+```
+sudo apt-get install virtualenv python-pip python3-dev
+```
+
+
+## Virtualenv
+
+##### In the previous section, [virtualenv](https://virtualenv.pypa.io/en/latest/) and [pip](https://pypi.python.org/pypi/pip) were installed to handle our [application dependencies](/application-dependencies.html).
+
+Create a directory for the virtualenvs. Then create a new virtualenv.
+
+```
+# the tilde "~" specifies the user's home directory, like /home/matt
+cd ~
+mkdir venvs
+# specify the system python3 installation
+virtualenv --python=/usr/bin/python3 venvs/flaskproj
+```
+
+Activate the virtualenv.
+
+```
+source ~/venvs/flaskproj/bin/activate
+```
+
+Our prompt will change after we properly activate the virtualenv.
+Our virtualenv is now activated with Python 3. We can install whatever
+dependencies we want, in our case Flask and Gunicorn.
+
+
+## Flask
+
+Create a new directory under our home directory that will store our
+Flask project. Change directory into the new folder.
+
+```
+mkdir ~/flaskproj
+cd ~/flaskproj
 ```
 
 

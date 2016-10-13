@@ -101,6 +101,8 @@ width:0;
   }
 
 .footnotes {
+
+  clear:both;
   margin:8em 0 4em 0;
 
   border:1px solid #ddd;
