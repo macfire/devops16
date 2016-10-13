@@ -206,7 +206,7 @@ sudo systemctl enable nginx
 
 <div class='creative-commons'>
   <a class="creative-commons-image" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
-	<img rel="license" alt="Creative Commons License" src="/assets/community/creativecommons-08b32a9279fcd47fcd78ac6a26331389.png"></a>
+	<img rel="license" alt="Creative Commons License" src="creativecommons.png"></a>
     <p>
 		This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
 		</p>
