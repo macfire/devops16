@@ -49,40 +49,86 @@ Enter `y` to let the system package installation process do its job.
 sudo apt-get install virtualenv python-pip python3-dev
 ```
 
+## Deploy with Git
+
+##### A directory for the APP will need to be created. If you want to create the Python virtual environment in the APP root directory, please follow the tutorial [Deploy Flask App with Git](devops16_6_deploy_flask_app_w_git.html) before proceeding with the next section.
 
 ## Virtualenv
 
 ##### In the previous section, [virtualenv](https://virtualenv.pypa.io/en/latest/) and [pip](https://pypi.python.org/pypi/pip) were installed to handle our [application dependencies](/application-dependencies.html).
 
-Create a directory for the virtualenvs. Then create a new virtualenv.
+Create a new virtualenv. This example uses the apps root folder.
 
 ```
-# the tilde "~" specifies the user's home directory, like /home/matt
-cd ~
-mkdir venvs
+cd /var/www/APP_NAME
+
 # specify the system python3 installation
-virtualenv --python=/usr/bin/python3 venvs/flaskproj
+virtualenv --python=/usr/bin/python3 venv
 ```
 
 Activate the virtualenv.
 
 ```
-source ~/venvs/flaskproj/bin/activate
+source /var/www/APP_NAME/venv/bin/activate
 ```
 
 Our prompt will change after we properly activate the virtualenv.
-Our virtualenv is now activated with Python 3. We can install whatever
-dependencies we want, in our case Flask and Gunicorn.
-
-
-## Flask
-
-Create a new directory under our home directory that will store our
-Flask project. Change directory into the new folder.
+Our virtualenv is now activated with Python 3. We can install
+dependencies. For example, from a requirements.txt file located in APP's code file:
 
 ```
-mkdir ~/flaskproj
-cd ~/flaskproj
+cd /var/www/APP_NAME/code
+sudo pip install -r requirements.txt
+
+```
+
+
+## Point Phusion passenger to venv
+
+Edit passenger config file to point to APP's virtualenv.
+Example from [phusionpassenger.com](https://www.phusionpassenger.com/library/config/nginx/reference/#passenger_python)
+
+```
+http {
+    passenger_root ...;
+
+    # Use Ruby 2.1 by default.
+    passenger_ruby /usr/bin/ruby2.1;
+    # Use Python 2.6 by default.
+    passenger_python /usr/bin/python2.6;
+    # Use /usr/bin/node by default.
+    passenger_nodejs /usr/bin/node;
+
+    server {
+        # This Rails web app will use Ruby 2.2.1, as installed by RVM
+        passenger_ruby /usr/local/rvm/wrappers/ruby-2.2.1/ruby;
+
+        listen 80;
+        server_name www.bar.com;
+        root /webapps/bar/public;
+
+        # If you have a web app deployed in a sub-URI, customize
+        # passenger_ruby/passenger_python inside a `location` block.
+        # The web app under www.bar.com/blog will use JRuby 1.7.1
+        location ~ ^/blog(/.*|$) {
+            alias /websites/blog/public$1;
+            passenger_base_uri /blog;
+            passenger_app_root /websites/blog;
+            passenger_document_root /websites/blog/public;
+            passenger_enabled on;
+            passenger_ruby /usr/local/rvm/wrappers/jruby-1.7.1/ruby;
+        }
+    }
+
+    server {
+        # This Flask web app will use Python 3.0
+        passenger_python /usr/bin/python3.0;
+
+        listen 80;
+        server_name www.baz.com;
+        root /webapps/baz/public;
+    }
+}
 ```
 
 
