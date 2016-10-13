@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<link type="text/css" rel="stylesheet" href="markdown_styles.css"/>
+</head>
+<body>
+
+<h1 id="devops16-installmongodbonubuntu16.04">DevOps16 - Install MongoDB on Ubuntu 16.04</h1>
+
+<h5 id="source:digitalocean.com"><a href="https://www.digitalocean.com/community/tutorials/how-to-install-mongodb-on-ubuntu-16-04">Source: digitalocean.com</a></h5>
+
+<dl>
+<dt><a href="../index.html">Home</a></dt>
+<dd><a href="devops16_1_ubuntu16_setup.html">1 - Ubuntu 16.04 user setup</a></dd>
+
+<dd><a href="devops16_2_install_nginx.html">2 - Install Nginx</a></dd>
+
+<dd><a href="devops16_3_install_phusionpassenger.html">3 - Install Phusion Passenger</a></dd>
+
+<dd><a href="devops16_4_install_mongodb.html">4 - Install MongoDB</a></dd>
+</dl>
+
+<h4 id="usesudouserviasshloginforfollowingcommandsinsteadofroot">Use sudo user via ssh login for following commands (instead of <code>root</code>)</h4>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>MongoDB is a free and open-source NoSQL document database used commonly in modern web applications. This tutorial will help you set up MongoDB on your server for a production application environment.</p>
+
+<ul>
+<li>As of publication time, the official Ubuntu 16.04 MongoDB packages have not yet been updated to use the new <code>systemd</code> init system <a href="https://www.digitalocean.com/community/tutorials/what-s-new-in-ubuntu-16-04#the-systemd-init-system">which is enabled by default on Ubuntu 16.04</a>. Running MongoDB using those packages on a clean Ubuntu 16.04 server involves following an additional step to configure MongoDB as a <code>systemd</code> service that will automatically start on boot.</li>
+</ul>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<p>To follow this tutorial, you will need:</p>
+
+<ul>
+<li>One Ubuntu 16.04 server set up by following this initial server setup tutorial, including a sudo non-root user</li>
+</ul>
+
+<h2 id="step1—addingthemongodbrepository">Step 1 — Adding the MongoDB Repository</h2>
+
+<h5 id="mongodbisalreadyincludedinubuntupackagerepositoriesbuttheofficialmongodbrepositoryprovidesmostup-to-dateversionandistherecommendedwayofinstallingthesoftware.inthisstepwewilladdthisofficialrepositorytoourserver.">MongoDB is already included in Ubuntu package repositories, but the official MongoDB repository provides most up-to-date version and is the recommended way of installing the software. In this step, we will add this official repository to our server.</h5>
+
+<p>Ubuntu ensures the authenticity of software packages by verifying that they are signed with GPG keys, so we first have to import they key for the official MongoDB repository.</p>
+
+<pre><code>sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
+</code></pre>
+
+<p>After successfully importing the key, you will see:</p>
+
+<pre><code>Output
+gpg: Total number processed: 1
+gpg:               imported: 1  (RSA: 1)
+</code></pre>
+
+<p>Next, we have to add the MongoDB repository details so apt will know where to download the packages from.</p>
+
+<p>Issue the following command to create a list file for MongoDB.</p>
+
+<pre><code>echo &quot;deb http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.2 multiverse&quot; | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
+</code></pre>
+
+<p>After adding the repository details, we need to update the packages list.</p>
+
+<pre><code>sudo apt-get update
+</code></pre>
+
+<h2 id="step2—installingandverifyingmongodb">Step 2 — Installing and Verifying MongoDB</h2>
+
+<p>Now we can install the MongoDB package itself. This command will install several packages containing latest stable version of MongoDB along with helpful management tools for the MongoDB server.</p>
+
+<pre><code>sudo apt-get install -y mongodb-org
+</code></pre>
+
+<h5 id="inordertoproperlylaunchmongodbasaserviceonubuntu16.04weadditionallyneedtocreateaunitfiledescribingtheservice.aunitfiletellssystemdhowtomanagearesource.themostcommonunittypeisaservicewhichdetermineshowtostartorstoptheservicewhenshoulditbeautomaticallystartedatbootandwhetheritisdependentonothersoftwaretorun.">In order to properly launch MongoDB as a service on Ubuntu 16.04, we additionally need to create a unit file describing the service. A <em>unit file</em> tells <code>systemd</code> how to manage a resource. The most common unit type is a service, which determines how to start or stop the service, when should it be automatically started at boot, and whether it is dependent on other software to run.</h5>
+
+<p>We&#8217;ll create a unit file to manage the MongoDB service.
+Create a configuration file named <code>mongodb.service</code> in the <code>/etc/systemd/system</code> directory using nano or your favorite text editor.</p>
+
+<pre><code>sudo nano /etc/systemd/system/mongodb.service
+</code></pre>
+
+<p>Paste in the following contents, then save and close the file.</p>
+
+<pre><code>/etc/systemd/system/mongodb.service
+[Unit]
+Description=High-performance, schema-free document-oriented database
+After=network.target
+
+[Service]
+User=mongodb
+ExecStart=/usr/bin/mongod --quiet --config /etc/mongod.conf
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+
+<h5 id="thisfilehasasimplestructure:">This file has a simple structure:</h5>
+
+<ul>
+<li><strong>Unit</strong> section contains the overview (e.g. a human-readable description for MongoDB service) as well as dependencies that must be satisfied before the service is started. In our case, MongoDB depends on networking already being available, hence network.target here.</li>
+<li><strong>Service</strong> section how the service should be started. The User directive specifies that the server will be run under the mongodb user, and the ExecStart directive defines the startup command for MongoDB server.</li>
+<li><strong>Install</strong> section tells <code>systemd</code> when the service should be automatically started. The multi-user.target is a standard system startup sequence, which means the server will be automatically started during boot.</li>
+</ul>
+
+<p>Next, start the newly created service with <code>systemctl</code>.</p>
+
+<pre><code>sudo systemctl start mongodb
+</code></pre>
+
+<p>While there is no output to this command, you can also use <code>systemctl</code> to check that the service has started properly.</p>
+
+<pre><code>sudo systemctl status mongodb
+</code></pre>
+
+<pre><code>Output
+● mongodb.service - High-performance, schema-free document-oriented database
+   Loaded: loaded (/etc/systemd/system/mongodb.service; enabled; vendor preset: enabled)
+   Active: active (running) since Mon 2016-04-25 14:57:20 EDT; 1min 30s ago
+ Main PID: 4093 (mongod)
+    Tasks: 16 (limit: 512)
+   Memory: 47.1M
+      CPU: 1.224s
+   CGroup: /system.slice/mongodb.service
+           └─4093 /usr/bin/mongod --quiet --config /etc/mongod.conf
+</code></pre>
+
+<p>The last step is to enable automatically starting MongoDB when the system starts.</p>
+
+<pre><code>sudo systemctl enable mongodb
+</code></pre>
+
+<h5 id="themongodbservernowconfiguredandrunningandyoucanmanagethemongodbserviceusingthesystemctlcommande.g.sudosystemctlmongodbstopsudosystemctlmongodbstart.">The MongoDB server now configured and running, and you can manage the MongoDB service using the <code>systemctl</code> command (e.g. <code>sudo systemctl mongodb stop</code>, <code>sudo systemctl mongodb start</code>).</h5>
+
+<h2 id="step3—adjustingthefirewalloptional">Step 3 — Adjusting the Firewall (Optional)</h2>
+
+<h5 id="assumingyouhavefollowedtheinitialserversetuptutorialinstructionstoenablethefirewallonyourservermongodbserverwillbeinaccessiblefromtheinternet.">Assuming you have followed the <a href="https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-16-04">initial server setup</a> tutorial instructions to enable the firewall on your server, MongoDB server will be inaccessible from the internet.</h5>
+
+<h5 id="ifyouintendtousethemongodbserveronlylocallywithapplicationsrunningonthesameserveritisarecommendedandsecuresetting.howeverifyouwouldliketobeabletoconnecttoyourmongodbserverfromtheinternetwehavetoallowtheincomingconnectionsinufw.">If you intend to use the MongoDB server only locally with applications running on the same server, it is a recommended and secure setting. However, if you would like to be able to connect to your MongoDB server from the internet, we have to allow the incoming connections in <code>ufw</code>.</h5>
+
+<h5 id="toallowaccesstomongodbonitsdefaultport27017fromeverywhereyoucouldusesudoufwallow27017.howeverenablinginternetaccesstomongodbserveronadefaultinstallationgivesunrestrictedaccesstothewholedatabaseserver.">To allow access to MongoDB on its default port 27017 from everywhere, you could use <code>sudo ufw allow 27017</code>. However, enabling internet access to MongoDB server on a default installation gives unrestricted access to the whole database server.</h5>
+
+<p>In most cases, MongoDB should be accessed only from certain trusted locations, such as another server hosting an application. To accomplish this task, you can allow access on MongoDB&#8217;s default port while specifying the IP address of another server that will be explicitly allowed to connect.</p>
+
+<pre><code>sudo ufw allow from your_other_server_ip/32 to any port 27017
+</code></pre>
+
+<p>You can verify the change in firewall settings with <code>ufw</code>.</p>
+
+<pre><code>sudo ufw status
+</code></pre>
+
+<p>You should see traffic to <code>27017</code> port allowed in the output.If you have decided to allow only a certain IP address to connect to MongoDB server, the IP address of the allowed location will be listed instead of Anywhere in the output.</p>
+
+<pre><code>Output
+Status: active
+
+To                         Action      From
+--                         ------      ----
+27017                      ALLOW       Anywhere
+OpenSSH                    ALLOW       Anywhere
+27017 (v6)                 ALLOW       Anywhere (v6)
+OpenSSH (v6)               ALLOW       Anywhere (v6)
+</code></pre>
+
+<h5 id="moreadvancedfirewallsettingsforrestrictingaccesstoservicesaredescribedinufwessentials:commonfirewallrulesandcommands.">More advanced firewall settings for restricting access to services are described in <a href="https://www.digitalocean.com/community/tutorials/ufw-essentials-common-firewall-rules-and-commands">UFW Essentials: Common Firewall Rules and Commands</a>.</h5>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<h5 id="morein-depthinstructionsregardingmongodbinstallationandconfigurationinthesedigitaloceancommunityarticles.">More in-depth instructions regarding MongoDB installation and configuration in <a href="https://www.digitalocean.com/community/search?q=mongodb">these DigitalOcean community articles</a>.</h5>
+
+<div class='footnotes'>
+<p>These step-by-step instructions are taken from various tutorials on <a href="https://digitalocean.com">digitalocean.com</a>, <a href="https://www.phusionpassenger.com">phusionpassenger.com</a>, and other sites. Some sources have been linked. Most step descriptions have been shortened and simplified. Some step sequences are from one source while other may come from various sources.</p>
+<p>These instructions and commands are placed on GitHub so I can conveniently find them. I am a novice with Ubuntu, Nginx, Passenger, command line, etc., so I probably can&#8217;t answer any questions. However, I&#8217;ll be glad to incorporate any corrections that are needed.</p>
+<p><em>Use instructions and commands at your own risk.</em></p>
+
+<div class='creative-commons'>
+  <a class="creative-commons-image" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+    <img rel="license" alt="Creative Commons License" src="/assets/community/creativecommons-08b32a9279fcd47fcd78ac6a26331389.png"></a>
+    <p>
+        This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+        </p>
+</div>
+</div>
+
+</body>
+</html>

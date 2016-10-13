@@ -97,3 +97,19 @@ width:0;
     clear:both;
     margin:1em 0;
   }
+
+.footnotes {
+  margin:8em 0 4em 0;
+
+  border:1px solid #ddd;
+  padding:2em;
+}
+  .footnotes p {
+    width:100%;
+    font-size:12px;
+    float:none;
+  }
+
+  .creative-commons {
+    text-align:center;
+  }
