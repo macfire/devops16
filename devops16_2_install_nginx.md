@@ -1,4 +1,5 @@
 CSS: markdown_styles.css
+TITLE: DevOps16 - Install Nginx on Ubuntu 16.04
 
 # DevOps16 - Install Nginx on Ubuntu 16.04
 

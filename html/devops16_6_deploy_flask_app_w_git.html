@@ -76,7 +76,7 @@ chmod 600 ~/.ssh/authorized_keys
 <pre><code>APP_USER=your_user_name
 
 sudo mkdir -p &quot;~$APP_USER/.ssh&quot;
-touch $HOME/.ssh/authorized_keys
+touch $APP_USER/.ssh/authorized_keys
 sudo sh -c &quot;cat $HOME/.ssh/authorized_keys &gt;&gt; ~$APP_USER/.ssh/authorized_keys&quot;
 sudo chown -R $APP_USER: &quot;~$APP_USER/.ssh&quot;
 sudo chmod 700 &quot;~$APP_USER/.ssh&quot;

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<link type="text/css" rel="stylesheet" href="markdown_styles.css"/>
+	<title>Terminal Commands</title>
+</head>
+<body>
+
+<h1 id="terminalcommands">Terminal Commands</h1>
+
+<h2 id="scp:transferfilesfromlocaltoremoteserver">$ scp : Transfer files from local to remote server</h2>
+
+<p>Manual</p>
+
+<pre><code>man scp
+</code></pre>
+
+<p>From remote to local</p>
+
+<pre><code>scp remote_user@remote_host:/path/to/remote/file /path/to/local/file
+</code></pre>
+
+<p>From local to remote</p>
+
+<pre><code>scp /path/to/local/file remote_user@remote_host:/path/to/remote/file
+</code></pre>
+
+<h2 id="generatesecret_key">Generate SECRET_KEY</h2>
+
+<p>Basic</p>
+
+<pre><code>import os
+
+os.urandom(24)
+</code></pre>
+
+<p>With hex formatting</p>
+
+<pre><code>import os
+import binascii
+
+binascii.hexlify(os.urandom(24))
+</code></pre>
+
+</body>
+</html>

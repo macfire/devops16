@@ -73,7 +73,7 @@ Ensure that `APP_USER` has SSH key installed:
 APP_USER=your_user_name
 
 sudo mkdir -p "~$APP_USER/.ssh"
-touch $HOME/.ssh/authorized_keys
+touch $APP_USER/.ssh/authorized_keys
 sudo sh -c "cat $HOME/.ssh/authorized_keys >> ~$APP_USER/.ssh/authorized_keys"
 sudo chown -R $APP_USER: "~$APP_USER/.ssh"
 sudo chmod 700 "~$APP_USER/.ssh"
