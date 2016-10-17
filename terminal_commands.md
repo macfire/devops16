@@ -3,6 +3,27 @@ TITLE: Terminal Commands
 
 # Terminal Commands
 
+[Home](../index.html)
+: [1 - Ubuntu 16.04 user setup](devops16_1_ubuntu16_setup.html)
+: [2 - Install Nginx](devops16_2_install_nginx.html)
+: [3 - Install Phusion Passenger](devops16_3_install_phusionpassenger.html)
+: [4 - Install MongoDB](devops16_4_install_mongodb.html)
+: [5 - Python venv](devops16_5_python_venv.html)
+: [6 - Deploy via Git](devops16_6_deploy_flask_app_w_git.html)
+: [Various commands](terminal_commands.html)
+
+
+
+## Log files
+
+### Nginx
+
+Nginx error log
+
+```
+cat /var/log/nginx/error.log
+```
+
 ## $ scp : Transfer files from local to remote server
 
 Manual

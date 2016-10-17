@@ -14,6 +14,7 @@ TITLE: DevOps16 - Deploy Flask app via Git
 : [4 - Install MongoDB](devops16_4_install_mongodb.html)
 : [5 - Python venv](devops16_5_python_venv.html)
 : [6 - Deploy via Git](devops16_6_deploy_flask_app_w_git.html)
+: [Various commands](terminal_commands.html)
 
 
 #### Replace `APP` and `APP_USER` with your app's name and your app user account's name.
