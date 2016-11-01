@@ -13,6 +13,7 @@ TITLE: DevOps16 - Migrate MongoDB databases and collections
 : [5 - Python venv](devops16_5_python_venv.html)
 : [6 - Deploy via Git](devops16_6_deploy_flask_app_w_git.html)
 : [7 - Migrate Mongodb](devops16_7_migrate_mongodb.html)
+: [Various commands](terminal_commands.html)
 
 
 

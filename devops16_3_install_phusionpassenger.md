@@ -13,6 +13,8 @@ TITLE: DevOps16 - Install Phusion Passenger + nginx on Ubuntu 16.04
 : [4 - Install MongoDB](devops16_4_install_mongodb.html)
 : [5 - Python venv](devops16_5_python_venv.html)
 : [6 - Deploy via Git](devops16_6_deploy_flask_app_w_git.html)
+: [7 - Migrate Mongodb](devops16_7_migrate_mongodb.html)
+: [Various commands](terminal_commands.html)
 
 
 ### Use sudo user via ssh login for following commands (instead of `root`)

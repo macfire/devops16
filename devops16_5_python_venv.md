@@ -15,7 +15,8 @@ TITLE: DevOps16 - Create Python Virtual Environment
 : [4 - Install MongoDB](devops16_4_install_mongodb.html)
 : [5 - Python venv](devops16_5_python_venv.html)
 : [6 - Deploy via Git](devops16_6_deploy_flask_app_w_git.html)
-
+: [7 - Migrate Mongodb](devops16_7_migrate_mongodb.html)
+: [Various commands](terminal_commands.html)
 
 
 ##### [Ubuntu](/ubuntu.html)'s latest Long Term Support (LTS) [operating system](/operating-systems.html) was released last month, in April 2016. The 16.04 update for Ubuntu is known as "Xenial Xerus" and it's the first Ubuntu release to include [Python 3](/python-2-or-3.html) as the default Python installation. We can use this new Ubuntu release along with Python version 3.5 to start a new [Flask](/flask.html) web application project.

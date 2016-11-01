@@ -25,6 +25,8 @@
 
 <dd><a href="devops16_6_deploy_flask_app_w_git.html">6 - Deploy via Git</a></dd>
 
+<dd><a href="devops16_7_migrate_mongodb.html">7 - Migrate Mongodb</a></dd>
+
 <dd><a href="terminal_commands.html">Various commands</a></dd>
 </dl>
 
@@ -212,6 +214,26 @@ Run following from your local computer. Replace <code>yourserver.com</code> with
 <li>Incorrectly configured <code>server_name</code> directive. The <code>server_name</code> must exactly match the host name in the URL. <em>For example, if you use the command curl http://45.55.91.235/ to access your app, then the server_name must be 45.55.91.235.</em></li>
 <li>DNS records not setup. Setting up DNS is outside the scope of this tutorial. In the mean time, we recommend that you use your server&#8217;s IP address as the server name.</li>
 </ol>
+
+<h2 id="updatingdeployedapp">Updating deployed app</h2>
+
+<p>Update git</p>
+
+<pre><code>sudo -u APP_USER -H git pull origin master
+</code></pre>
+
+<p>To clone target git branch:</p>
+
+<pre><code>cd /var/www/APP_NAME
+sudo -u APP_USER -H git clone --branch=end_result git://github.com/url-here.git code
+</code></pre>
+
+<p>Restart or reload Nginx</p>
+
+<pre><code>sudo service nginx restart
+
+sudo service nginx reload
+</code></pre>
 
 <div class='footnotes'>
 <p>These step-by-step instructions are taken from various tutorials on <a href="https://digitalocean.com">digitalocean.com</a>, <a href="https://www.phusionpassenger.com">phusionpassenger.com</a>, and other sites. Some sources have been linked. Most step descriptions have been shortened and simplified. Some step sequences are from one source while other may come from various sources.</p>
