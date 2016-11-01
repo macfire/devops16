@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<link type="text/css" rel="stylesheet" href="markdown_styles.css"/>
+	<title>DevOps16 - Migrate MongoDB databases and collections</title>
+</head>
+<body>
+
+<h1 id="devops16-migratemongodbdatabasesandcollections">DevOps16 - Migrate MongoDB databases and collections</h1>
+
+<h5 id="source:docs.mongodb.com"><a href="https://docs.mongodb.com/manual/tutorial/backup-and-restore-tools/">Source: docs.mongodb.com</a></h5>
+
+<dl>
+<dt><a href="../index.html">Home</a></dt>
+<dd><a href="devops16_1_ubuntu16_setup.html">1 - Ubuntu 16.04 user setup</a></dd>
+
+<dd><a href="devops16_2_install_nginx.html">2 - Install Nginx</a></dd>
+
+<dd><a href="devops16_3_install_phusionpassenger.html">3 - Install Phusion Passenger</a></dd>
+
+<dd><a href="devops16_4_install_mongodb.html">4 - Install MongoDB</a></dd>
+
+<dd><a href="devops16_5_python_venv.html">5 - Python venv</a></dd>
+
+<dd><a href="devops16_6_deploy_flask_app_w_git.html">6 - Deploy via Git</a></dd>
+
+<dd><a href="devops16_7_migrate_mongodb.html">7 - Migrate Mongodb</a></dd>
+</dl>
+
+<h2 id="backupadatabasewithmongodump">Back Up a Database with mongodump</h2>
+
+<h4 id="excludelocaldatabase">Exclude local Database</h4>
+
+<p><code>mongodump</code> excludes the content of the local database in its output.
+Required Access</p>
+
+<p>To run <code>mongodump</code> against a MongoDB deployment that has access control enabled, you must have privileges that grant find action for each database to back up. The built-in backup role provides the required privileges to perform backup of any and all databases.</p>
+
+<p>Changed in version 3.2.1: The backup role provides additional privileges to back up the system.profile collections that exist when running with database profiling. Previously, users required an additional read access on this collection.</p>
+
+<h2 id="basicmongodumpoperations">Basic <code>mongodump</code> Operations</h2>
+
+<p>The <code>mongodump</code> utility backs up data by connecting to a running <code>mongod</code> or <code>mongos</code> instance.</p>
+
+<p>The utility can create a backup for an entire server, database or collection, or can use a query to backup just part of a collection.</p>
+
+<p>When you run <code>mongodump</code> without any arguments, the command connects to the MongoDB instance on the local system (e.g. 127.0.0.1 or localhost) on port 27017 and creates a database backup named dump/ in the current directory.</p>
+
+<p>To backup data from a <code>mongod</code> or <code>mongos</code> instance running on the same machine and on the default port of 27017, use the following command:</p>
+
+<pre><code>mongodump
+</code></pre>
+
+<p>The data format used by <code>mongodump</code> from version 2.2 or later is incompatible with earlier versions of mongod. Do not use recent versions of <code>mongodump</code> to back up older data stores.</p>
+
+<p>You can also specify the &#8211;host and &#8211;port of the MongoDB instance that the <code>mongodump</code> should connect to. For example:</p>
+
+<pre><code>mongodump --host mongodb.example.net --port 27017
+</code></pre>
+
+<p><code>mongodump</code> will write BSON files that hold a copy of data accessible via the mongod listening on port 27017 of the mongodb.example.net host.</p>
+
+<p>See Create Backups from Non-Local <code>mongod</code> Instances for more information.</p>
+
+<p>To specify a different output directory, you can use the <code>--out</code> or <code>-o</code> option:</p>
+
+<pre><code>mongodump --out /data/backup/
+</code></pre>
+
+<p>To limit the amount of data included in the database dump, you can specify <code>--db</code> and <code>--collection</code> as options to <code>mongodump</code>. For example:</p>
+
+<pre><code>mongodump --collection myCollection --db test
+</code></pre>
+
+<p>This operation creates a dump of the collection named myCollection from the database test in a dump/ subdirectory of the current working directory.</p>
+
+<p><code>mongodump</code> overwrites output files if they exist in the backup data folder. Before running the <code>mongodump</code> command multiple times, either ensure that you no longer need the files in the output folder (the default is the dump/ folder) or rename the folders or files.</p>
+
+<h2 id="pointintimeoperationusingoplogs">Point in Time Operation Using Oplogs</h2>
+
+<p>Use the <code>--oplog</code> option with <code>mongodump</code> to collect the oplog entries to build a point-in-time snapshot of a database within a replica set. With <code>--oplog</code>, <code>mongodump</code> copies all the data from the source database as well as all of the oplog entries from the beginning to the end of the backup procedure. This operation, in conjunction with <code>mongorestore --oplogReplay</code>, allows you to restore a backup that reflects the specific moment in time that corresponds to when mongodump completed creating the dump file.</p>
+
+<h2 id="createbackupsfromnon-localmongodinstances">Create Backups from Non-Local mongod Instances</h2>
+
+<p>The <code>--host</code> and <code>--port</code> options for <code>mongodump</code> allow you to connect to and backup from a remote host. Consider the following example:</p>
+
+<pre><code>mongodump --host mongodb1.example.net --port 3017 --username user --password pass --out /opt/backup/mongodump-2013-10-24
+</code></pre>
+
+<p>On any <code>mongodump</code> command you may, as above, specify username and password credentials to specify database authentication.
+Restore a Database with <code>mongorestore</code></p>
+
+<h2 id="accesscontrol">Access Control</h2>
+
+<p>To restore data to a MongoDB deployment that has access control enabled, the restore role provides access to restore any database if the backup data does not include system.profile collection data.</p>
+
+<p>If the backup data includes system.profile collection data and the target database does not contain the system.profile collection, <code>mongorestore</code> attempts to create the collection even though the program does not actually restore system.profile documents. As such, the user requires additional privileges to perform createCollection and convertToCapped actions on the system.profile collection for a database.</p>
+
+<p>If running <code>mongorestore</code> with <code>--oplogReplay</code>, the restore role is insufficient to replay the oplog. To replay the oplog, create a user-defined role that has anyAction on anyResource and grant only to users who must run <code>mongorestore</code> with <code>--oplogReplay</code>.</p>
+
+<h2 id="basicmongorestoreoperations">Basic mongorestore Operations</h2>
+
+<p>The <code>mongorestore</code> utility restores a binary backup created by mongodump. By default, <code>mongorestore</code> looks for a database backup in the dump/ directory.</p>
+
+<p>The <code>mongorestore</code> utility restores data by connecting to a running <code>mongod</code> or <code>mongos</code> directly.</p>
+
+<p><code>mongorestore</code> can restore either an entire database backup or a subset of the backup.</p>
+
+<p>To use <code>mongorestore</code> to connect to an active <code>mongod</code> or <code>mongos</code>, use a command with the following prototype form:</p>
+
+<pre><code>mongorestore --port &lt;port number&gt; &lt;path to the backup&gt;
+</code></pre>
+
+<p>Consider the following example:</p>
+
+<pre><code>mongorestore dump-2013-10-25/
+</code></pre>
+
+<p>Here, <code>mongorestore</code> imports the database backup in the dump&#8211;2013&#8211;10&#8211;25 directory to the mongod instance running on the localhost interface on the default port 27017.</p>
+
+<h2 id="restorepointintimeoplogbackup">Restore Point in Time Oplog Backup</h2>
+
+<p>If you created your database dump using the &#8211;oplog option to ensure a point-in-time snapshot, call mongorestore with the &#8211;oplogReplay option, as in the following example:</p>
+
+<pre><code>mongorestore --oplogReplay
+</code></pre>
+
+<p>You may also consider using the <code>mongorestore --objcheck</code> option to check the integrity of objects while inserting them into the database, or you may consider the mongorestore <code>--drop</code> option to drop each collection from the database before restoring from backups.
+Restore Backups to Non-Local mongod Instances</p>
+
+<p>By default, <code>mongorestore</code> connects to a MongoDB instance running on the localhost interface (e.g. 127.0.0.1) and on the default port (27017). If you want to restore to a different host or port, use the <code>--host</code> and <code>--port</code> options.</p>
+
+<p>Consider the following example:</p>
+
+<pre><code>mongorestore --host mongodb1.example.net --port 3017 --username user --password pass /opt/backup/mongodump-2013-10-24
+</code></pre>
+
+<p>As above, you may specify username and password connections if your mongod requires authentication.</p>
+
+</body>
+</html>
