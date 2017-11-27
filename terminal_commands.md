@@ -10,8 +10,9 @@ TITLE: Terminal Commands
 : [4 - Install MongoDB](devops16_4_install_mongodb.html)
 : [5 - Python venv](devops16_5_python_venv.html)
 : [6 - Deploy via Git](devops16_6_deploy_flask_app_w_git.html)
+: [7 - Migrate Mongodb](devops16_7_migrate_mongodb.html)
 : [Various commands](terminal_commands.html)
-
+: [File transfers](file_transfer.html)
 
 
 ## Log files
@@ -22,6 +23,12 @@ Nginx error log
 
 ```
 cat /var/log/nginx/error.log
+```
+
+Nginx access log
+
+```
+cat /var/log/nginx/access.log
 ```
 
 ## $ scp : Transfer files from local to remote server

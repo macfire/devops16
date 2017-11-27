@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<link type="text/css" rel="stylesheet" href="markdown_styles.css"/>
+	<title>File Transfers</title>
+</head>
+<body>
+
+<h1 id="filetransfers">File Transfers</h1>
+
+<dl>
+<dt><a href="../index.html">Home</a></dt>
+<dd><a href="devops16_1_ubuntu16_setup.html">1 - Ubuntu 16.04 user setup</a></dd>
+
+<dd><a href="devops16_2_install_nginx.html">2 - Install Nginx</a></dd>
+
+<dd><a href="devops16_3_install_phusionpassenger.html">3 - Install Phusion Passenger</a></dd>
+
+<dd><a href="devops16_4_install_mongodb.html">4 - Install MongoDB</a></dd>
+
+<dd><a href="devops16_5_python_venv.html">5 - Python venv</a></dd>
+
+<dd><a href="devops16_6_deploy_flask_app_w_git.html">6 - Deploy via Git</a></dd>
+
+<dd><a href="devops16_7_migrate_mongodb.html">7 - Migrate Mongodb</a></dd>
+
+<dd><a href="terminal_commands.html">Various commands</a></dd>
+
+<dd><a href="file_transfer.html">File transfers</a></dd>
+</dl>
+
+<h2 id="fromubuntutorackspacecontainer">From Ubuntu to Rackspace container</h2>
+
+<h5 id="source:support.rackspace.com"><a href="https://support.rackspace.com/how-to/migrate-to-rackspace-from-another-hosting-provider/">Source: support.rackspace.com</a></h5>
+
+<h5 id="useoneofthefollowingmethodstotransferyourdatafromyourexistinghostingprovidertoyournewcloudserver.themigrationmethodthatyouusedependsonthenatureofyourdata.">Use one of the following methods to transfer your data from your existing hosting provider to your new cloud server. The migration method that you use depends on the nature of your data.</h5>
+
+<h5 id="note:backupthedataonyourexistingserverbeforeyoumigrateit."><em>Note: Back up the data on your existing server before you migrate it.</em></h5>
+
+<h2 id="rsync">rsync</h2>
+
+<h5 id="youcanusersynctoconnecttheserversandtransferthedata.thefollowingstepsdescribehowtoestablishcommunicationbetweenyourexistingserverinstanceandnewrackspaceserverinstance.">You can use rsync to connect the servers and transfer the data. The following steps describe how to establish communication between your existing server instance and new Rackspace server instance.</h5>
+
+<p>Log in as root to your existing server.</p>
+
+<p>Verify whether rsync is installed on your existing server.</p>
+
+<pre><code>rsync -version
+</code></pre>
+
+<p>If rsync is not installed, install it based on your distribution.</p>
+
+<pre><code>apt-get install rsync
+</code></pre>
+
+<p>Use SSH to log in to your Rackspace server from your existing server. Generate an SSH key from your existing server if you have not done so already:</p>
+
+<pre><code>ssh-keygen -t rsa -b 4096 -v
+</code></pre>
+
+<p>Transfer your SSH key to your Rackspace server. Substitute your new Rackspace server’s IP address in the following command.</p>
+
+<pre><code>ssh-copy-id 111.344.65.781
+</code></pre>
+
+<p>Copy your existing server files by using rsync. Replace the IP address after root@ with the IP address of your Rackspace cloud server.</p>
+
+<p><em>Note: Adjust the following command to fit your specific situation. For example, you might need additional excludes or to change the source and destination paths.</em></p>
+
+<pre><code>rsync --exclude=&quot;/sys/*&quot; --exclude=&quot;/proc/*&quot; -aHSKDvz -e ssh / root@111.344.65.781:/media/xvda/
+</code></pre>
+
+<hr />
+
+<h5 id="source:digitalocean"><a href="https://www.digitalocean.com/community/tutorials/how-to-use-rsync-to-sync-local-and-remote-directories-on-a-vps">Source: DigitalOcean</a></h5>
+
+<h5 id="note:useatrailingslashatendofsourcedirectorytotransfercontentsofdirectoryinsteadofdirectoryitself.">Note: use a trailing slash at end of source directory to transfer <em>contents</em> of directory instead of directory itself.</h5>
+
+<p>rsync flags</p>
+
+<pre><code>`-r` = recursive
+
+`-a` = stands for &quot;archive&quot; and syncs recursively and preserves symbolic links, special and device files, modification times, group, owner, and permissions.
+
+`-n` (or --dry-run) = dry-run for testing
+
+`-P` = combines flags `--progress` and `--partial`
+</code></pre>
+
+<p>Sync with remote system</p>
+
+<pre><code>rsync -anP ~/dir1/ username@remote_host:destination_directory
+</code></pre>
+
+<h2 id="openstackswift">OpenStack Swift</h2>
+
+<p><a href="https://www.openstack.org/software/releases/ocata/components/swift">Source: Openstack</a></p>
+
+</body>
+</html>
