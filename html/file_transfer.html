@@ -97,5 +97,17 @@
 
 <p><a href="https://www.openstack.org/software/releases/ocata/components/swift">Source: Openstack</a></p>
 
+<p><a href="https://support.rackspace.com/how-to/cloud-files-uploading-large-files/">https://support.rackspace.com/how-to/cloud-files-uploading-large-files/</a></p>
+
+<p>Example login via commandline</p>
+
+<pre><code>swift -A https://auth.api.rackspacecloud.com/v1.0 -U username -K api_key stat -v
+</code></pre>
+
+<p>Uploading multiple files. Important: be sure to call command from directory containing files to be uploaded.</p>
+
+<pre><code>swift -A https://auth.api.rackspacecloud.com/v1.0 -U username -K api_key upload &lt;Rackspace container/folder&gt; &lt;file name_1&gt; &lt;filename_2&gt; &lt;filename_3&gt; --changed --skip-identical
+</code></pre>
+
 </body>
 </html>

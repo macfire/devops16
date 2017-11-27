@@ -91,3 +91,17 @@ rsync -anP ~/dir1/ username@remote_host:destination_directory
 ## OpenStack Swift
 
 [Source: Openstack](https://www.openstack.org/software/releases/ocata/components/swift)
+
+[https://support.rackspace.com/how-to/cloud-files-uploading-large-files/](https://support.rackspace.com/how-to/cloud-files-uploading-large-files/)
+
+Example login via commandline
+
+```
+swift -A https://auth.api.rackspacecloud.com/v1.0 -U username -K api_key stat -v
+```
+
+Uploading multiple files. Important: be sure to call command from directory containing files to be uploaded.
+
+```
+swift -A https://auth.api.rackspacecloud.com/v1.0 -U username -K api_key upload <Rackspace container/folder> <file name_1> <filename_2> <filename_3> --changed --skip-identical
+```
