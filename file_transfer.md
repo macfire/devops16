@@ -69,7 +69,7 @@ rsync --exclude="/sys/*" --exclude="/proc/*" -aHSKDvz -e ssh / root@111.344.65.7
 ##### [Source: DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-use-rsync-to-sync-local-and-remote-directories-on-a-vps)
 
 
-#####Note: use a trailing slash at end of source directory to transfer _contents_ of directory instead of directory itself.
+##### Note: use a trailing slash at end of source directory to transfer _contents_ of directory instead of directory itself.
 
 rsync flags
 
