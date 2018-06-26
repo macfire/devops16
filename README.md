@@ -1,5 +1,5 @@
 # devops16
-### sh commands to setup Ubuntu 16.04 + Nginx + Passenger
+### ssh commands to setup Ubuntu 16.04 + Nginx + Passenger
 
 [HTML view](https://macfire.github.io/devops16/)
 
